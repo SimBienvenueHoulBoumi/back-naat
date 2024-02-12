@@ -3,11 +3,14 @@ import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -20,6 +23,8 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: true,
     }),
     TasksModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

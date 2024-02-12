@@ -13,7 +13,7 @@ export class TasksService {
     private taskRepository: Repository<Task>,
   ) {}
 
-  create(createTaskDto: CreateTaskDto) {
+  async create(createTaskDto: CreateTaskDto) {
     const newTask = this.taskRepository.create({
       ...createTaskDto,
       status: true,
@@ -24,11 +24,11 @@ export class TasksService {
     return this.taskRepository.save(newTask);
   }
 
-  findAll() {
+  async findAll() {
     return this.taskRepository.find();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.taskRepository.findOne({
       where: {
         id,
@@ -36,11 +36,11 @@ export class TasksService {
     });
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
+  async update(id: string, updateTaskDto: UpdateTaskDto) {
     return this.taskRepository.update(id, updateTaskDto);
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     return this.taskRepository.delete(id);
   }
 }
