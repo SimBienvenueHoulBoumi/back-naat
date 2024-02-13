@@ -13,6 +13,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Nestjs - Angular - Authentication - API')
+    .addBearerAuth()
     .setDescription(
       'simple nestjs authentication with jwt and passport credentials',
     )

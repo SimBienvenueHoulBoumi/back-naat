@@ -5,12 +5,12 @@ import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
-      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -25,6 +25,7 @@ import { UsersModule } from './users/users.module';
     TasksModule,
     AuthModule,
     UsersModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [],

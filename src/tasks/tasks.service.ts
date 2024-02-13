@@ -16,7 +16,7 @@ export class TasksService {
   async create(createTaskDto: CreateTaskDto) {
     const newTask = this.taskRepository.create({
       ...createTaskDto,
-      status: true,
+      status: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     });

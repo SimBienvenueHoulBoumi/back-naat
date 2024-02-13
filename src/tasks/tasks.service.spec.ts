@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
+import { Task } from './entities/task.entity';
 
 describe('TasksService', () => {
   let service: TasksService;
@@ -12,7 +13,10 @@ describe('TasksService', () => {
     service = module.get<TasksService>(TasksService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('getTasks', () => {
+    it('should return an array of tasks', async () => {
+      const tasks = await service.findAll();
+      expect(tasks).toBeInstanceOf(Task);
+    });
   });
 });

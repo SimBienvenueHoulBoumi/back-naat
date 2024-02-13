@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 
 import * as bcrypt from 'bcrypt';
-import { UserDto } from 'src/users/dto/user.dto';
 import { AuthDto } from './dto/create-auth.dto';
 
 @Injectable()
@@ -13,36 +12,40 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(userdto: UserDto) {
-    const existingUser = await this.usersService.findOne(userdto.username);
-    if (existingUser) {
-      throw new UnauthorizedException('Username already exists.');
+  async register(register: AuthDto) {
+    try {
+      return await this.usersService.create({
+        username: register.username,
+        password: register.password,
+      });
+    } catch (error) {
+      throw new UnauthorizedException(`user already exist`)
+        .getResponse()
+        .valueOf();
     }
-    await this.usersService.create(userdto);
-    return {
-      result: 'User created successfully!',
-    };
   }
 
-  async signIn(userdto: AuthDto) {
-    const user = await this.usersService.findOne(userdto.username);
+  async signIn(signIn: AuthDto) {
+    const user = await this.usersService.findOne(signIn.username);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials.');
+      throw new UnauthorizedException('user not found').getResponse().valueOf();
     }
 
     const isPasswordValid = await bcrypt.compare(
-      userdto.password,
+      signIn.password,
       user.password,
     );
 
-    if (isPasswordValid) {
-      const payload = { sub: user.id, username: user.username };
-      return {
-        access_token: await this.jwtService.signAsync(payload),
-      };
-    } else {
-      throw new UnauthorizedException('Invalid credentials.');
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid password')
+        .getResponse()
+        .valueOf();
     }
+
+    const payload = { sub: user.id, username: user.username };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }
