@@ -1,4 +1,4 @@
-import { Profile } from 'src/profile/entities/profile.entity';
+import { Profile } from '../../profile/entities/profile.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
 @Entity()

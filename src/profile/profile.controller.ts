@@ -7,7 +7,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { AuthGuard } from 'src/auth/guard/guard.guard';
+import { AuthGuard } from '../auth/guard/guard.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 

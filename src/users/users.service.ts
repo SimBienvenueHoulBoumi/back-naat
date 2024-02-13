@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { UserDto } from './dto/user.dto';
 
 import * as bcrypt from 'bcrypt';
-import { Profile } from 'src/profile/entities/profile.entity';
+import { Profile } from '../profile/entities/profile.entity';
 
 @Injectable()
 export class UsersService {
