@@ -1,3 +1,4 @@
+// AuthService.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
@@ -19,7 +20,7 @@ export class AuthService {
         password: register.password,
       });
     } catch (error) {
-      throw new UnauthorizedException(`user already exist`)
+      throw new UnauthorizedException(`User already exists`)
         .getResponse()
         .valueOf();
     }
@@ -29,7 +30,9 @@ export class AuthService {
     const user = await this.usersService.findOne(signIn.username);
 
     if (!user) {
-      throw new UnauthorizedException('user not found').getResponse().valueOf();
+      throw new UnauthorizedException(`User doesn't exist`)
+        .getResponse()
+        .valueOf();
     }
 
     const isPasswordValid = await bcrypt.compare(

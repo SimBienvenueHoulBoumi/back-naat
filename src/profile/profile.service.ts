@@ -25,7 +25,9 @@ export class ProfileService {
 
     // Vérifier si le profil existe
     if (!profile) {
-      throw new UnauthorizedException('Profile not found');
+      throw new UnauthorizedException('Profile not found')
+        .getResponse()
+        .valueOf();
     }
 
     // Mettre à jour les champs du profil

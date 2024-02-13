@@ -49,7 +49,9 @@ export class UsersService {
 
     this.profileRepository.save(newProfile);
 
-    return this.userRepository.save(newUser);
+    this.userRepository.save(newUser);
+
+    return existingUser;
   }
 
   async findOne(username: string) {
