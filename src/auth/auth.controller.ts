@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/create-auth.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -19,7 +11,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @ApiOperation({ summary: 'login user' })
-  @UseGuards(LocalAuthGuard)
   signIn(@Body() signInDto: AuthDto) {
     return this.authService.signIn(signInDto);
   }

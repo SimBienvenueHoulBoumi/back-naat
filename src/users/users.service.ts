@@ -49,9 +49,7 @@ export class UsersService {
 
     this.profileRepository.save(newProfile);
 
-    this.userRepository.save(newUser);
-
-    return existingUser;
+    return this.userRepository.save(newUser);
   }
 
   async findOne(username: string) {
@@ -60,5 +58,9 @@ export class UsersService {
         username,
       },
     });
+  }
+
+  async update(username: string, password: string) {
+    return this.userRepository.update({ username }, { password: password });
   }
 }
