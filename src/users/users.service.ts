@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -22,7 +22,9 @@ export class UsersService {
 
     const existingUser = await this.findOne(userDto.username);
     if (existingUser) {
-      throw new Error('Username already exists');
+      throw new UnauthorizedException('Username already exists')
+        .getResponse()
+        .valueOf();
     }
 
     const newUser = this.userRepository.create({
@@ -58,9 +60,6 @@ export class UsersService {
         username,
       },
     });
-    if (!user) {
-      throw new NotFoundException('User not found').getResponse().valueOf();
-    }
 
     return user;
   }

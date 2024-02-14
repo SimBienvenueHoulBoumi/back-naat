@@ -7,10 +7,9 @@ import {
   Body,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-// import { AuthGuard } from '../auth/guard/guard.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('profile')
 @ApiTags('profile')

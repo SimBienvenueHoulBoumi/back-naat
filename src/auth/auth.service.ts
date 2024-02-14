@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -17,23 +18,17 @@ export class AuthService {
   ) {}
 
   async register(register: AuthDto) {
-    try {
-      return await this.usersService.create({
-        username: register.username,
-        password: register.password,
-      });
-    } catch (error) {
-      throw new UnauthorizedException(`user already exist`)
-        .getResponse()
-        .valueOf();
-    }
+    return await this.usersService.create({
+      username: register.username,
+      password: register.password,
+    });
   }
 
   async signIn(signIn: AuthDto) {
     const user = await this.usersService.findOne(signIn.username);
 
     if (!this.usersService.findOne(signIn.username)) {
-      throw new UnauthorizedException('user not found').getResponse().valueOf();
+      throw new NotFoundException('user not found').getResponse().valueOf();
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -63,14 +58,16 @@ export class AuthService {
 
     // Vérifier si l'utilisateur existe
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new NotFoundException('User not found').getResponse().valueOf();
     }
 
     // Vérifier si le mot de passe fourni correspond au mot de passe de l'utilisateur
     const passwordMatch = await bcrypt.compare(oldPassword, user.password);
 
     if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException('Invalid password')
+        .getResponse()
+        .valueOf();
     }
 
     // Générer le nouveau hash du mot de passe
@@ -82,7 +79,9 @@ export class AuthService {
       await this.usersService.update(user.username, hashedPassword);
       return { message: 'Password updated successfully' };
     } catch (error) {
-      throw new BadRequestException('Password update failed');
+      throw new BadRequestException('Password update failed')
+        .getResponse()
+        .valueOf();
     }
   }
 }
