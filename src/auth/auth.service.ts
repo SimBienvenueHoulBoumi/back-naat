@@ -53,29 +53,37 @@ export class AuthService {
     };
   }
 
-  async forgetPassword(username: string, newPassword: string) {
+  async updatePassword(
+    username: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
+    // Trouver l'utilisateur dans la base de données
     const user = await this.usersService.findOne(username);
 
+    // Vérifier si l'utilisateur existe
     if (!user) {
-      throw new UnauthorizedException('User not found').getResponse().valueOf();
+      throw new UnauthorizedException('User not found');
     }
 
-    // Générer le nouveau hash de mot de passe
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    // Vérifier si le mot de passe fourni correspond au mot de passe de l'utilisateur
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
 
-    // Mettre à jour le mot de passe de l'utilisateur
-    user.password = hashedPassword;
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Invalid password');
+    }
 
+    // Générer le nouveau hash du mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, 10); // 10 est le nombre de tours
+
+    // Mettre à jour le mot de passe de l'utilisateur dans la base de données
     try {
-      // Sauvegarder les modifications dans la base de données
-      await this.usersService.update(user.id, hashedPassword);
+      // Passer directement le nouveau mot de passe hashé
+      await this.usersService.update(user.username, hashedPassword);
+      return { message: 'Password updated successfully' };
     } catch (error) {
-      throw new BadRequestException('Password update failed')
-        .getResponse()
-        .valueOf();
+      throw new BadRequestException('Password update failed');
     }
-
-    return { message: 'Password updated successfully' };
   }
 
   async verifyIdentity(username: string) {
