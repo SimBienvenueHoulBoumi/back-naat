@@ -32,7 +32,7 @@ export class AuthService {
   async signIn(signIn: AuthDto) {
     const user = await this.usersService.findOne(signIn.username);
 
-    if (!user) {
+    if (!this.usersService.findOne(signIn.username)) {
       throw new UnauthorizedException('user not found').getResponse().valueOf();
     }
 
@@ -83,12 +83,6 @@ export class AuthService {
       return { message: 'Password updated successfully' };
     } catch (error) {
       throw new BadRequestException('Password update failed');
-    }
-  }
-
-  async verifyIdentity(username: string) {
-    if (!this.usersService.findOne(username)) {
-      throw new UnauthorizedException('user not found').getResponse().valueOf();
     }
   }
 }
