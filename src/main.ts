@@ -7,9 +7,10 @@ async function bootstrap() {
 
   app.enableCors({
     allowedHeaders: '*',
-    origin: ['http://localhost:3000'],
+    origin: '*',
     credentials: true,
   });
+  
 
   const config = new DocumentBuilder()
     .setTitle('Nestjs - Angular - Authentication - API')
